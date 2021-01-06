@@ -12,9 +12,11 @@ const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
 export const reportScene = new WizardScene(
   "report",
-  // First question
   (ctx) => {
+    // First question
+
     ctx.wizard.state.userMessages = [];
+
     reportMessage(ctx);
 
     bot.telegram
@@ -32,9 +34,11 @@ export const reportScene = new WizardScene(
 
     return ctx.wizard.next(ctx.chat);
   },
-  // Second question
   (ctx) => {
+    // Second question
+
     ctx.wizard.state.type = ctx.message.text;
+
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
@@ -115,10 +119,9 @@ export const reportScene = new WizardScene(
     // Third question
 
     ctx.wizard.state.problem = ctx.message.text;
-    //!
+
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
-    //!
 
     reportMessage(ctx);
 
@@ -136,11 +139,12 @@ export const reportScene = new WizardScene(
       .then(({ message_id }) => {
         ctx.wizard.state.userMessages.push(message_id);
       });
+
     return ctx.wizard.next();
   },
 
   (ctx) => {
-    // Fourth question
+    // Fourth questionh
 
     let date = new Date();
     switch (ctx.message.text) {
@@ -164,8 +168,10 @@ export const reportScene = new WizardScene(
         break;
     }
 
-    //deletePreviousBotMessages(ctx);
+    deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
+
+    reportMessage(ctx);
 
     ctx
       .reply(
@@ -182,38 +188,48 @@ export const reportScene = new WizardScene(
 
     return ctx.wizard.next();
   },
+
   (ctx) => {
     // Fifth question
+
     getLocation(ctx.message, ctx.updateSubTypes[0]);
     ctx.wizard.state.location = ctx.message.location;
-    //console.log(ctx.message.location);
+
     bot.telegram.sendLocation(
       ctx.chat.id,
       ctx.message.location.latitude,
       ctx.message.location.longitude
     );
 
-    reportMessage(ctx);
+    deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
+
+    reportMessage(ctx);
+
     bot.telegram
       .sendMessage(ctx.chat.id, "Добавьте фото проблемы и нажмите 'Далее'", {
         reply_markup: {
           keyboard: [[{ text: "Далее" }]],
-          //resize_keyboard: true,
         },
       })
       .then(({ message_id }) => {
         ctx.wizard.state.userMessages.push(message_id);
       });
+
     return ctx.wizard.next();
   },
+
   (ctx) => {
     // Sixth question
+
     ctx.wizard.state.photo = getFileId(ctx.message, ctx.updateSubTypes[0]);
-    //ctx.wizard.state.photo=fileId
     ctx.replyWithPhoto(ctx.wizard.state.photo);
-    reportMessage(ctx);
+
+    deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
+
+    reportMessage(ctx);
+
     bot.telegram
       .sendMessage(
         ctx.chat.id,
@@ -229,6 +245,7 @@ export const reportScene = new WizardScene(
       .then(({ message_id }) => {
         ctx.wizard.state.userMessages.push(message_id);
       });
+
     return ctx.wizard.next();
   },
 
@@ -236,11 +253,15 @@ export const reportScene = new WizardScene(
     // Final scene
 
     ctx.wizard.state.userComment = ctx.message.text;
-    ctx.deleteMessage();
     ctx.wizard.state.chatId = ctx.chat.id;
 
+    deletePreviousBotMessages(ctx);
+    ctx.deleteMessage();
+
     reportMessage(ctx);
+    //!
     console.log(ctx.wizard.state);
+    //!
     ctx.reply("Данные успешно переданы.\nСпасибо за Вашу гражданскую позицию!");
 
     return ctx.scene.leave().then(botMenu(ctx));
