@@ -17,20 +17,20 @@ export const reportScene = new WizardScene(
 
     ctx.wizard.state.userMessages = [];
 
-    reportMessage(ctx);
-
-    bot.telegram
-      .sendMessage(ctx.chat.id, "Какого типа проблема?", {
-        reply_markup: {
-          keyboard: [
-            [{ text: "незаконная свалка" }, { text: "мусорный контейнер" }],
-            [{ text: "автотранспорт" }, { text: "деревья" }],
-          ],
-        },
-      })
-      .then(({ message_id }) => {
-        ctx.wizard.state.userMessages.push(message_id);
-      });
+    reportMessage(ctx).then(() => {
+      bot.telegram
+        .sendMessage(ctx.chat.id, "Какого типа проблема?", {
+          reply_markup: {
+            keyboard: [
+              [{ text: "незаконная свалка" }, { text: "мусорный контейнер" }],
+              [{ text: "автотранспорт" }, { text: "деревья" }],
+            ],
+          },
+        })
+        .then(({ message_id }) => {
+          ctx.wizard.state.userMessages.push(message_id);
+        });
+    });
 
     return ctx.wizard.next(ctx.chat);
   },
@@ -44,69 +44,69 @@ export const reportScene = new WizardScene(
 
     switch (ctx.message.text) {
       case "незаконная свалка":
-        reportMessage(ctx);
-
-        bot.telegram
-          .sendMessage(ctx.chat.id, "Свалка отходов какого типа?", {
-            reply_markup: {
-              keyboard: [
-                [{ text: "строительный мусор" }],
-                [{ text: "бытовой мусор" }],
-                [{ text: "коммерческий мусор" }],
-              ],
-            },
-          })
-          .then(({ message_id }) => {
-            ctx.wizard.state.userMessages.push(message_id);
-          });
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, "Свалка отходов какого типа?", {
+              reply_markup: {
+                keyboard: [
+                  [{ text: "строительный мусор" }],
+                  [{ text: "бытовой мусор" }],
+                  [{ text: "коммерческий мусор" }],
+                ],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
 
         return ctx.wizard.next(ctx.chat);
 
       case "мусорный контейнер":
-        reportMessage(ctx);
-
-        bot.telegram
-          .sendMessage(ctx.chat.id, "Какая проблема с контейнером?", {
-            reply_markup: {
-              keyboard: [[{ text: "переполенный" }], [{ text: "сломанный" }]],
-            },
-          })
-          .then(({ message_id }) => {
-            ctx.wizard.state.userMessages.push(message_id);
-          });
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, "Какая проблема с контейнером?", {
+              reply_markup: {
+                keyboard: [[{ text: "переполенный" }], [{ text: "сломанный" }]],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
 
         return ctx.wizard.next(ctx.chat);
 
       case "автотранспорт":
-        reportMessage(ctx);
-
-        bot.telegram
-          .sendMessage(ctx.chat.id, "Какая проблема с авто?", {
-            reply_markup: {
-              keyboard: [
-                [{ text: "брошенный  авто" }],
-                [{ text: "сгоревший авто" }],
-              ],
-            },
-          })
-          .then(({ message_id }) => {
-            ctx.wizard.state.userMessages.push(message_id);
-          });
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, "Какая проблема с авто?", {
+              reply_markup: {
+                keyboard: [
+                  [{ text: "брошенный  авто" }],
+                  [{ text: "сгоревший авто" }],
+                ],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
 
         return ctx.wizard.next(ctx.chat);
 
       case "деревья":
-        reportMessage(ctx);
-
-        bot.telegram
-          .sendMessage(ctx.chat.id, "Какая проблема с деревьями?", {
-            reply_markup: {
-              keyboard: [[{ text: "спиленные" }], [{ text: "поваленные" }]],
-            },
-          })
-          .then(({ message_id }) => {
-            ctx.wizard.state.userMessages.push(message_id);
-          });
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, "Какая проблема с деревьями?", {
+              reply_markup: {
+                keyboard: [[{ text: "спиленные" }], [{ text: "поваленные" }]],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
 
         return ctx.wizard.next(ctx.chat);
 
@@ -123,22 +123,22 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx);
-
-    bot.telegram
-      .sendMessage(ctx.chat.id, "Когда примерно это произошло?", {
-        reply_markup: {
-          keyboard: [
-            [{ text: "Сегодня" }],
-            [{ text: "Вчера" }],
-            [{ text: "Около недели назад" }],
-            [{ text: "Около месяца назад" }],
-          ],
-        },
-      })
-      .then(({ message_id }) => {
-        ctx.wizard.state.userMessages.push(message_id);
-      });
+    reportMessage(ctx).then(() => {
+      bot.telegram
+        .sendMessage(ctx.chat.id, "Когда примерно это произошло?", {
+          reply_markup: {
+            keyboard: [
+              [{ text: "Сегодня" }],
+              [{ text: "Вчера" }],
+              [{ text: "Около недели назад" }],
+              [{ text: "Около месяца назад" }],
+            ],
+          },
+        })
+        .then(({ message_id }) => {
+          ctx.wizard.state.userMessages.push(message_id);
+        });
+    });
 
     return ctx.wizard.next();
   },
@@ -171,20 +171,20 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx);
-
-    ctx
-      .reply(
-        "Взять геолокацию проблемы (ваше текущее местоположение)",
-        Extra.markup((markup) => {
-          return markup
-            .resize()
-            .keyboard([markup.locationRequestButton("Отправить геолокацию")]);
-        })
-      )
-      .then(({ message_id }) => {
-        ctx.wizard.state.userMessages.push(message_id);
-      });
+    reportMessage(ctx).then(() => {
+      ctx
+        .reply(
+          "Взять геолокацию проблемы (ваше текущее местоположение)",
+          Extra.markup((markup) => {
+            return markup
+              .resize()
+              .keyboard([markup.locationRequestButton("Отправить геолокацию")]);
+          })
+        )
+        .then(({ message_id }) => {
+          ctx.wizard.state.userMessages.push(message_id);
+        });
+    });
 
     return ctx.wizard.next();
   },
@@ -204,17 +204,17 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx);
-
-    bot.telegram
-      .sendMessage(ctx.chat.id, "Добавьте фото проблемы и нажмите 'Далее'", {
-        reply_markup: {
-          keyboard: [[{ text: "Далее" }]],
-        },
-      })
-      .then(({ message_id }) => {
-        ctx.wizard.state.userMessages.push(message_id);
-      });
+    reportMessage(ctx).then(() => {
+      bot.telegram
+        .sendMessage(ctx.chat.id, "Добавьте фото проблемы и нажмите 'Далее'", {
+          reply_markup: {
+            keyboard: [[{ text: "Далее" }]],
+          },
+        })
+        .then(({ message_id }) => {
+          ctx.wizard.state.userMessages.push(message_id);
+        });
+    });
 
     return ctx.wizard.next();
   },
@@ -228,23 +228,23 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx);
+    reportMessage(ctx).then(() => {
+      bot.telegram
+        .sendMessage(
+          ctx.chat.id,
+          "Хотите оставить свой комментарий о проблеме?",
+          {
+            reply_markup: {
+              keyboard: [[{ text: "Без комментариев!" }]],
 
-    bot.telegram
-      .sendMessage(
-        ctx.chat.id,
-        "Хотите оставить свой комментарий о проблеме?",
-        {
-          reply_markup: {
-            keyboard: [[{ text: "Без комментариев!" }]],
-
-            one_time_keyboard: true,
-          },
-        }
-      )
-      .then(({ message_id }) => {
-        ctx.wizard.state.userMessages.push(message_id);
-      });
+              one_time_keyboard: true,
+            },
+          }
+        )
+        .then(({ message_id }) => {
+          ctx.wizard.state.userMessages.push(message_id);
+        });
+    });
 
     return ctx.wizard.next();
   },
@@ -258,11 +258,13 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx);
-    //!
+    reportMessage(ctx).then(() =>
+      ctx.reply(
+        "Данные успешно переданы.\nСпасибо за Вашу гражданскую позицию!"
+      )
+    );
+
     console.log(ctx.wizard.state);
-    //!
-    ctx.reply("Данные успешно переданы.\nСпасибо за Вашу гражданскую позицию!");
 
     return ctx.scene.leave().then(botMenu(ctx));
   }

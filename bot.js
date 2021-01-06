@@ -33,7 +33,7 @@ export const telegramBot = async () => {
     3. Прикрепите фото и гео данные проблемы.
     `
       )
-      .then(botMenu(ctx));
+      .then(()=>botMenu(ctx));
   });
 
   bot.hears("Информировать о проблеме в городе", (ctx) => {
