@@ -2,63 +2,13 @@ import Telegraf from "telegraf";
 const { Extra } = Telegraf;
 import WizardScene from "telegraf/scenes/wizard/index.js";
 import { botMenu } from "./botMenu.js";
-
 import { createReport } from "../seeder.js";
+import { reportMessage } from "./reportMessage.js";
+import { getFileId } from "./getFileId.js";
+import { getLocation } from "./getLocation.js";
+import { deletePreviousBotMessages } from "./deletePreviousBotMessages.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
-
-const reportMessage = (ctx) => {
-  const startMessage = `<b>Данные о проблеме:</b>
-     <pre>Тип проблемы: ${
-       ctx.wizard.state.type ? ctx.wizard.state.type : ""
-     }</pre>
-     <pre>Проблема: ${
-       ctx.wizard.state.problem ? ctx.wizard.state.problem : ""
-     }</pre>
-     <pre>Дата: ${ctx.wizard.state.date ? "✔" : "x"}</pre>
-     <pre>Геолокация: ${ctx.wizard.state.location ? "✔" : "x"}</pre>
-     <pre>Фото: ${ctx.wizard.state.image ? "✔" : "x"}</pre>
-     <pre>Комментарий: ${
-       ctx.wizard.state.userComment ? ctx.wizard.state.userComment : ""
-     }</pre>
-     
-     `;
-
-  bot.telegram
-    .sendMessage(ctx.chat.id, startMessage, { parse_mode: "HTML" })
-    .then(({ message_id }) => {
-      ctx.wizard.state.userMessages.push(message_id);
-    });
-};
-
-const getFileId = (message, type) => {
-  switch (type) {
-    case "photo":
-      return message[type][message.photo.length - 1].file_id;
-    case "document":
-      return message[type].file_id;
-    default:
-      return false;
-  }
-};
-
-const getLocation = (message, type) => {
-  switch (type) {
-    case "location":
-
-    default:
-      return false;
-  }
-};
-
-const deletePreviousBotMessages = (ctx) => {
-  if (ctx.wizard.state.userMessages.length != 0) {
-    ctx.wizard.state.userMessages.map((msg) => {
-      ctx.deleteMessage(msg);
-    });
-    ctx.wizard.state.userMessages.length = 0;
-  }
-};
 
 export const reportScene = new WizardScene(
   "report",
