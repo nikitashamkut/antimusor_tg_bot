@@ -11,7 +11,7 @@ export const reportMessage = async (ctx) => {
        }</pre>
        <pre>Дата: ${ctx.wizard.state.date ? "✔" : "✘"}</pre>
        <pre>Геолокация: ${ctx.wizard.state.location ? "✔" : "✘"}</pre>
-       <pre>Фото: ${ctx.wizard.state.image ? "✔" : "✘"}</pre>
+       <pre>Фото: ${ctx.wizard.state.photo ? "✔" : "✘"}</pre>
        <pre>Комментарий: ${
          ctx.wizard.state.userComment ? ctx.wizard.state.userComment : "✘"
        }</pre>

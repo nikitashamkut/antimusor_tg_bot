@@ -8,6 +8,7 @@ import { getFileId } from "./getFileId.js";
 import { getLocation } from "./getLocation.js";
 import { deletePreviousBotMessages } from "./deletePreviousBotMessages.js";
 import { reportData } from "./botData.js";
+import { getBotAnswers } from "./getBotAnswers.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
@@ -124,22 +125,38 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
+    //!
+     console.log(...getBotAnswers(reportData.date.answers,2))
+
     reportMessage(ctx).then(() => {
       bot.telegram
         .sendMessage(ctx.chat.id, reportData.date.question, {
           reply_markup: {
-            keyboard: [
-              [{ text: "Сегодня" }],
-              [{ text: "Вчера" }],
-              [{ text: "Около недели назад" }],
-              [{ text: "Около месяца назад" }],
-            ],
+            keyboard: [...getBotAnswers(reportData.date.answers,2)],
           },
         })
         .then(({ message_id }) => {
           ctx.wizard.state.userMessages.push(message_id);
         });
     });
+    //!
+
+    // reportMessage(ctx).then(() => {
+    //   bot.telegram
+    //     .sendMessage(ctx.chat.id, reportData.date.question, {
+    //       reply_markup: {
+    //         keyboard: [
+    //           [{ text: "Сегодня" }],
+    //           [{ text: "Вчера" }],
+    //           [{ text: "Около недели назад" }],
+    //           [{ text: "Около месяца назад" }],
+    //         ],
+    //       },
+    //     })
+    //     .then(({ message_id }) => {
+    //       ctx.wizard.state.userMessages.push(message_id);
+    //     });
+    // });
 
     return ctx.wizard.next();
   },
