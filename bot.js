@@ -9,11 +9,12 @@ import { createReport } from "./seeder.js";
 import reportModel from "./model/reportModel.js";
 import { botMenu } from "./botFunctions/botMenu.js";
 import { reportScene } from "./botFunctions/botReport.js";
+import { reportData, menuData, helpData } from "./botFunctions/botData.js";
 
 export const telegramBot = async () => {
   const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
-  bot.command(["start", "menu", "exit", "again", "restart"], (ctx) => {
+  bot.command(menuData.startCommands, (ctx) => {
     ctx.deleteMessage();
     botMenu(ctx);
   });
@@ -23,22 +24,24 @@ export const telegramBot = async () => {
   bot.use(session());
   bot.use(stage.middleware());
 
-  bot.hears("Как пользоваться ботом", (ctx) => {
+  bot.hears(menuData.help, (ctx) => {
     ctx.deleteMessage();
-    ctx
-      .reply(
-        `Для использования бота:
-    1. Выберите в меню "Информировать о проблеме в городе"
-    2. Введите требуемые Данные
-    3. Прикрепите фото и гео данные проблемы.
-    `
-      )
-      .then(()=>botMenu(ctx));
+    ctx.reply(helpData.helpText).then(() => botMenu(ctx));
   });
 
-  bot.hears("Информировать о проблеме в городе", (ctx) => {
+  bot.hears(menuData.report, (ctx) => {
     ctx.deleteMessage();
-    ctx.scene.enter("report");
+    ctx.scene.enter(reportData.reportTrigger);
+  });
+
+  bot.command(reportData.reportTrigger, (ctx) => {
+    ctx.deleteMessage();
+    ctx.scene.enter(reportData.reportTrigger);
+  });
+
+  bot.help((ctx) => {
+    ctx.deleteMessage();
+    ctx.reply(helpData.helpText).then(() => botMenu(ctx));
   });
 
   bot.launch();

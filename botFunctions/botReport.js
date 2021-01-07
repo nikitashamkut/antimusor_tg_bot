@@ -7,11 +7,12 @@ import { reportMessage } from "./reportMessage.js";
 import { getFileId } from "./getFileId.js";
 import { getLocation } from "./getLocation.js";
 import { deletePreviousBotMessages } from "./deletePreviousBotMessages.js";
+import { reportData } from "./botData.js";
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
 export const reportScene = new WizardScene(
-  "report",
+  reportData.reportTrigger,
   (ctx) => {
     // First question
 
@@ -125,7 +126,7 @@ export const reportScene = new WizardScene(
 
     reportMessage(ctx).then(() => {
       bot.telegram
-        .sendMessage(ctx.chat.id, "Когда примерно это произошло?", {
+        .sendMessage(ctx.chat.id, reportData.date.question, {
           reply_markup: {
             keyboard: [
               [{ text: "Сегодня" }],
@@ -174,7 +175,7 @@ export const reportScene = new WizardScene(
     reportMessage(ctx).then(() => {
       ctx
         .reply(
-          "Взять геолокацию проблемы (ваше текущее местоположение)",
+          reportData.location.question,
           Extra.markup((markup) => {
             return markup
               .resize()
@@ -206,7 +207,7 @@ export const reportScene = new WizardScene(
 
     reportMessage(ctx).then(() => {
       bot.telegram
-        .sendMessage(ctx.chat.id, "Добавьте фото проблемы и нажмите 'Далее'", {
+        .sendMessage(ctx.chat.id, reportData.photo.question, {
           reply_markup: {
             keyboard: [[{ text: "Далее" }]],
           },
@@ -230,17 +231,13 @@ export const reportScene = new WizardScene(
 
     reportMessage(ctx).then(() => {
       bot.telegram
-        .sendMessage(
-          ctx.chat.id,
-          "Хотите оставить свой комментарий о проблеме?",
-          {
-            reply_markup: {
-              keyboard: [[{ text: "Без комментариев!" }]],
+        .sendMessage(ctx.chat.id, reportData.comment.question, {
+          reply_markup: {
+            keyboard: [[{ text: "Без комментариев!" }]],
 
-              one_time_keyboard: true,
-            },
-          }
-        )
+            one_time_keyboard: true,
+          },
+        })
         .then(({ message_id }) => {
           ctx.wizard.state.userMessages.push(message_id);
         });
@@ -258,11 +255,7 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx).then(() =>
-      ctx.reply(
-        "Данные успешно переданы.\nСпасибо за Вашу гражданскую позицию!"
-      )
-    );
+    reportMessage(ctx).then(() => ctx.reply(reportData.finalText));
 
     console.log(ctx.wizard.state);
 
