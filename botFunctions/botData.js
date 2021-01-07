@@ -1,7 +1,34 @@
-export const reportData = {
-  //   types:["незаконная свалка"]
-  // ,
+const typeOne = "незаконная свалка";
+const typeTwo = "мусорный контейнер";
+const typeThree = "автотранспорт";
+const typeFour = "деревья";
 
+export const reportData = {
+  types: {
+    question: "Какого типа проблема?",
+
+    typeOne: {
+      title: typeOne,
+      question: "Свалка отходов какого типа?",
+      answers: ["строительный мусор", "бытовой мусор", "коммерческий мусор"],
+    },
+    typeTwo: {
+      title: typeTwo,
+      question: "Какая проблема с контейнером?",
+      answers: ["переполенный", "сломанный", "отсутствует"],
+    },
+    typeThree: {
+      title: typeThree,
+      question: "Какая проблема с авто?",
+      answers: ["брошенный  авто", "сгоревший авто", "ужасный тюнинг"],
+    },
+    typeFour: {
+      title: typeFour,
+      question: "Какая проблема с деревьями?",
+      answers: ["спиленные", "поваленные", "представляющее опасность падения"],
+    },
+    answers: [typeOne, typeTwo, typeThree, typeFour],
+  },
   date: {
     question: "Когда примерно это произошло?",
     answers: ["Сегодня", "Вчера", "Около недели назад", "Около месяца назад"],

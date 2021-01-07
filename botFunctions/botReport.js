@@ -21,12 +21,9 @@ export const reportScene = new WizardScene(
 
     reportMessage(ctx).then(() => {
       bot.telegram
-        .sendMessage(ctx.chat.id, "Какого типа проблема?", {
+        .sendMessage(ctx.chat.id, reportData.types.question, {
           reply_markup: {
-            keyboard: [
-              [{ text: "незаконная свалка" }, { text: "мусорный контейнер" }],
-              [{ text: "автотранспорт" }, { text: "деревья" }],
-            ],
+            keyboard: [...getBotAnswers(reportData.types.answers, 2)],
           },
         })
         .then(({ message_id }) => {
@@ -45,15 +42,43 @@ export const reportScene = new WizardScene(
     ctx.deleteMessage();
 
     switch (ctx.message.text) {
-      case "незаконная свалка":
+      case reportData.types.typeOne.title:
         reportMessage(ctx).then(() => {
           bot.telegram
-            .sendMessage(ctx.chat.id, "Свалка отходов какого типа?", {
+            .sendMessage(ctx.chat.id, reportData.types.typeOne.question, {
+              reply_markup: {
+                keyboard: [...getBotAnswers(reportData.types.typeOne.answers)],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
+
+        return ctx.wizard.next(ctx.chat);
+
+      case reportData.types.typeTwo.title:
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, reportData.types.typeTwo.question, {
+              reply_markup: {
+                keyboard: [...getBotAnswers(reportData.types.typeTwo.answers)],
+              },
+            })
+            .then(({ message_id }) => {
+              ctx.wizard.state.userMessages.push(message_id);
+            });
+        });
+
+        return ctx.wizard.next(ctx.chat);
+
+      case reportData.types.typeThree.title:
+        reportMessage(ctx).then(() => {
+          bot.telegram
+            .sendMessage(ctx.chat.id, reportData.types.typeThree.question, {
               reply_markup: {
                 keyboard: [
-                  [{ text: "строительный мусор" }],
-                  [{ text: "бытовой мусор" }],
-                  [{ text: "коммерческий мусор" }],
+                  ...getBotAnswers(reportData.types.typeThree.answers),
                 ],
               },
             })
@@ -64,45 +89,12 @@ export const reportScene = new WizardScene(
 
         return ctx.wizard.next(ctx.chat);
 
-      case "мусорный контейнер":
+      case reportData.types.typeFour.title:
         reportMessage(ctx).then(() => {
           bot.telegram
-            .sendMessage(ctx.chat.id, "Какая проблема с контейнером?", {
+            .sendMessage(ctx.chat.id, reportData.types.typeFour.question, {
               reply_markup: {
-                keyboard: [[{ text: "переполенный" }], [{ text: "сломанный" }]],
-              },
-            })
-            .then(({ message_id }) => {
-              ctx.wizard.state.userMessages.push(message_id);
-            });
-        });
-
-        return ctx.wizard.next(ctx.chat);
-
-      case "автотранспорт":
-        reportMessage(ctx).then(() => {
-          bot.telegram
-            .sendMessage(ctx.chat.id, "Какая проблема с авто?", {
-              reply_markup: {
-                keyboard: [
-                  [{ text: "брошенный  авто" }],
-                  [{ text: "сгоревший авто" }],
-                ],
-              },
-            })
-            .then(({ message_id }) => {
-              ctx.wizard.state.userMessages.push(message_id);
-            });
-        });
-
-        return ctx.wizard.next(ctx.chat);
-
-      case "деревья":
-        reportMessage(ctx).then(() => {
-          bot.telegram
-            .sendMessage(ctx.chat.id, "Какая проблема с деревьями?", {
-              reply_markup: {
-                keyboard: [[{ text: "спиленные" }], [{ text: "поваленные" }]],
+                keyboard: [...getBotAnswers(reportData.types.typeFour.answers)],
               },
             })
             .then(({ message_id }) => {
@@ -125,38 +117,17 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    //!
-     console.log(...getBotAnswers(reportData.date.answers,2))
-
     reportMessage(ctx).then(() => {
       bot.telegram
         .sendMessage(ctx.chat.id, reportData.date.question, {
           reply_markup: {
-            keyboard: [...getBotAnswers(reportData.date.answers,2)],
+            keyboard: [...getBotAnswers(reportData.date.answers, 2)],
           },
         })
         .then(({ message_id }) => {
           ctx.wizard.state.userMessages.push(message_id);
         });
     });
-    //!
-
-    // reportMessage(ctx).then(() => {
-    //   bot.telegram
-    //     .sendMessage(ctx.chat.id, reportData.date.question, {
-    //       reply_markup: {
-    //         keyboard: [
-    //           [{ text: "Сегодня" }],
-    //           [{ text: "Вчера" }],
-    //           [{ text: "Около недели назад" }],
-    //           [{ text: "Около месяца назад" }],
-    //         ],
-    //       },
-    //     })
-    //     .then(({ message_id }) => {
-    //       ctx.wizard.state.userMessages.push(message_id);
-    //     });
-    // });
 
     return ctx.wizard.next();
   },
@@ -166,18 +137,18 @@ export const reportScene = new WizardScene(
 
     let date = new Date();
     switch (ctx.message.text) {
-      case "Сегодня":
+      case reportData.date.answers[0]:
         ctx.wizard.state.date = date.toString();
         break;
-      case "Вчера":
+      case reportData.date.answers[1]:
         date.setDate(date.getDate() - 1);
         ctx.wizard.state.date = date.toString();
         break;
-      case "Около недели назад":
+      case reportData.date.answers[2]:
         date.setDate(date.getDate() - 7);
         ctx.wizard.state.date = date.toString();
         break;
-      case "Около месяца назад":
+      case reportData.date.answers[3]:
         date.setDate(date.getDate() - 30);
         ctx.wizard.state.date = date.toString();
         break;
@@ -196,7 +167,9 @@ export const reportScene = new WizardScene(
           Extra.markup((markup) => {
             return markup
               .resize()
-              .keyboard([markup.locationRequestButton("Отправить геолокацию")]);
+              .keyboard([
+                markup.locationRequestButton(reportData.location.answers[0]),
+              ]);
           })
         )
         .then(({ message_id }) => {
@@ -226,7 +199,7 @@ export const reportScene = new WizardScene(
       bot.telegram
         .sendMessage(ctx.chat.id, reportData.photo.question, {
           reply_markup: {
-            keyboard: [[{ text: "Далее" }]],
+            keyboard: [...getBotAnswers(reportData.photo.answers)],
           },
         })
         .then(({ message_id }) => {
@@ -250,8 +223,7 @@ export const reportScene = new WizardScene(
       bot.telegram
         .sendMessage(ctx.chat.id, reportData.comment.question, {
           reply_markup: {
-            keyboard: [[{ text: "Без комментариев!" }]],
-
+            keyboard: [...getBotAnswers(reportData.comment.answers)],
             one_time_keyboard: true,
           },
         })
