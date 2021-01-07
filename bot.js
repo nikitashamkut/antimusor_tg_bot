@@ -1,12 +1,8 @@
 import colors from "colors";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 import Telegraf from "telegraf";
 import session from "telegraf/session.js";
 import Stage from "telegraf/stage.js";
 import WizardScene from "telegraf/scenes/wizard/index.js";
-import { createReport } from "./seeder.js";
-import reportModel from "./model/reportModel.js";
 import { botMenu } from "./botFunctions/botMenu.js";
 import { reportScene } from "./botFunctions/botReport.js";
 import { reportData, menuData, helpData } from "./botFunctions/botData.js";

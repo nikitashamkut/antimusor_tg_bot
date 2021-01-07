@@ -46,6 +46,7 @@ export const reportData = {
     answers: ["Без комментариев!"],
   },
   finalText: "Данные успешно переданы.\nСпасибо за Вашу гражданскую позицию!",
+  errorText: "Ошибка! Пожалуйста, заполните запрос заново!",
   reportTrigger: "report",
 };
 

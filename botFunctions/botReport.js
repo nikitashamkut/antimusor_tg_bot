@@ -2,7 +2,7 @@ import Telegraf from "telegraf";
 const { Extra } = Telegraf;
 import WizardScene from "telegraf/scenes/wizard/index.js";
 import { botMenu } from "./botMenu.js";
-import { createReport } from "../seeder.js";
+import { createReport } from "./createReport.js";
 import { reportMessage } from "./reportMessage.js";
 import { getFileId } from "./getFileId.js";
 import { getLocation } from "./getLocation.js";
@@ -24,6 +24,7 @@ export const reportScene = new WizardScene(
         .sendMessage(ctx.chat.id, reportData.types.question, {
           reply_markup: {
             keyboard: [...getBotAnswers(reportData.types.answers, 2)],
+            force_reply: true,
           },
         })
         .then(({ message_id }) => {
@@ -133,7 +134,7 @@ export const reportScene = new WizardScene(
   },
 
   (ctx) => {
-    // Fourth questionh
+    // Fourth question
 
     let date = new Date();
     switch (ctx.message.text) {
@@ -244,9 +245,10 @@ export const reportScene = new WizardScene(
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
 
-    reportMessage(ctx).then(() => ctx.reply(reportData.finalText));
-
-    console.log(ctx.wizard.state);
+    reportMessage(ctx)
+      .then(createReport(ctx.wizard.state))
+      .then(() => ctx.reply(reportData.finalText))
+      .catch(() => ctx.reply(reportData.errorText));
 
     return ctx.scene.leave().then(botMenu(ctx));
   }
