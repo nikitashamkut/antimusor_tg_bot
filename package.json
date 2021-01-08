@@ -1,7 +1,7 @@
 {
-  "name": "City-Info-Service_back",
+  "name": "antimusor_bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Telegram bot for the final project",
   "main": "index.js",
   "type": "module",
   "scripts": {
