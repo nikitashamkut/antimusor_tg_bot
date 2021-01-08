@@ -42,20 +42,10 @@ export const telegramBot = async () => {
     ctx.reply(helpData.helpText).then(() => botMenu(ctx));
   });
 
-  // if (process.env.NODE_ENV === "production") {
-  //   bot.telegram.setWebhook(`${URL}/antimusor_bot`);
-  //   bot.startWebhook(`${URL}/antimusor_bot`, null, PORT);
-  // } else {
-  //   bot.launch();
-  // }
-  //!
-
   if (process.env.NODE_ENV === "production") {
     bot.telegram.setWebhook(`${URL}/bot${process.env.TELEGRAM_TOKEN}`);
     bot.startWebhook(`/bot${process.env.TELEGRAM_TOKEN}`, null, PORT);
   } else {
     bot.launch();
   }
-
-  //!
 };
