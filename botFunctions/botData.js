@@ -64,3 +64,15 @@ export const helpData = {
   3. Прикрепите фото и гео данные проблемы.
   `,
 };
+
+export const reportMessageData = {
+  filledSign: "✔",
+  emptySign: "✘",
+  title: "ДАННЫЕ О ПРОБЛЕМЕ: ",
+  typeOfProblem: "Тип проблемы: ",
+  problem: "Проблема: ",
+  date: "Дата: ",
+  location: "Геолокация: ",
+  photo: "Фото: ",
+  comment: "Комментарий: ",
+};
