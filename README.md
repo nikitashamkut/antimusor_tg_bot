@@ -1,14 +1,14 @@
-# rsclone_backend
+# antimusor telegram bot
 
 ## General info
 
-Telegram @antimusor_bot for the final project.
+Telegram @antimusor_bot (backend side project)
 
 ## Technologies
 
 Project is created with:
 
-- [Telegraf](https://telegraf.js.org/#/)
+- [Telegrafjs](https://telegraf.js.org/#/)
 - [MongoDB](https://mongodb.com/)
 
 ## Setup
@@ -28,3 +28,7 @@ To run this project, using npm:
 ```
 $ npm run start
 ```
+
+## Author
+
+[Nikita Shamkut](https://github.com/nikitashamkut)
