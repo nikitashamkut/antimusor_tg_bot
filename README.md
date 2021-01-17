@@ -1,4 +1,4 @@
-# antimusor telegram bot
+# ANTIMUSOR TELEGRAM BOT
 
 ## General info
 
