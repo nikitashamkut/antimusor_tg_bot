@@ -17,9 +17,10 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "mongoose": "^5.11.8",
+    "node-fetch": "^2.6.1",
     "telegraf": "^3.38.0"
   },
   "engines": {
-    "node":"14.x"
+    "node": "14.x"
   }
 }

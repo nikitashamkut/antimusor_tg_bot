@@ -18,7 +18,7 @@ const reportSchema = mongoose.Schema({
     required: true,
   },
   photo: {
-    type: [String],
+    type: [Object],
     required: true,
   },
   userComment: {
@@ -35,7 +35,7 @@ const reportSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    default: "pending",
+    default: "new",
   },
   admin: {
     type: String,
@@ -47,7 +47,7 @@ const reportSchema = mongoose.Schema({
   },
   city: {
     type: String,
-    default: "",
+    default: "nizhny-novgorod",
   },
 });
 

@@ -9,6 +9,8 @@ import { getLocation } from "./getLocation.js";
 import { deletePreviousBotMessages } from "./deletePreviousBotMessages.js";
 import { reportData } from "./botData.js";
 import { getBotAnswers } from "./getBotAnswers.js";
+import { getPath } from "./getPath.js";
+import fetch from "node-fetch";
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
@@ -214,8 +216,10 @@ export const reportScene = new WizardScene(
   (ctx) => {
     // Sixth question
 
-    ctx.wizard.state.photo = getFileId(ctx.message, ctx.updateSubTypes[0]);
-    ctx.replyWithPhoto(ctx.wizard.state.photo);
+    ctx.wizard.state.photo = { id: null, path: null };
+    ctx.wizard.state.photo.id = getFileId(ctx.message, ctx.updateSubTypes[0]);
+    ctx.replyWithPhoto(ctx.wizard.state.photo.id);
+    getPath(ctx.wizard.state.photo.id, ctx);
 
     deletePreviousBotMessages(ctx);
     ctx.deleteMessage();
